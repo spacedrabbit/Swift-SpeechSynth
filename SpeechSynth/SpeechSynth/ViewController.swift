@@ -10,7 +10,7 @@ import UIKit
 import QuartzCore
 import AVFoundation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
     
     @IBOutlet weak var tvEditor: UITextView!
     @IBOutlet weak var btnSpeak: UIButton!
@@ -31,8 +31,8 @@ class ViewController: UIViewController {
         btnSpeak.layer.cornerRadius = 40.0
         btnPause.layer.cornerRadius = 40.0
         btnStop.layer.cornerRadius  = 40.0
-        // Do any additional setup after loading the view, typically from a nib.
-        tvEditor.text = "Some default text"
+
+        tvEditor.text = "Some default text\n and now with some\nline breaks to test\npausing"
         
         btnPause.alpha = 0.0
         btnStop.alpha = 0.0
@@ -44,6 +44,8 @@ class ViewController: UIViewController {
             registerDefaultSettings()
         }
         
+        speechSynthesizer.delegate = self
+        
         var swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: "handleSwipeDownGesture:")
         swipeDownGestureRecognizer.direction = UISwipeGestureRecognizerDirection.Down
         view.addGestureRecognizer(swipeDownGestureRecognizer)
@@ -52,6 +54,8 @@ class ViewController: UIViewController {
     func handleSwipeDownGesture (gestureRecognizer: UISwipeGestureRecognizer){
         tvEditor.resignFirstResponder()
     }
+    
+    // MARK: NSUserDefaults registering/loading
     
     func registerDefaultSettings() {
         rate = AVSpeechUtteranceDefaultSpeechRate
@@ -74,11 +78,6 @@ class ViewController: UIViewController {
         }
         
         return false
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: Button Visibility
@@ -104,13 +103,19 @@ class ViewController: UIViewController {
     @IBAction func speak(sender: AnyObject){
         
         if !speechSynthesizer.speaking {
-            let speechUtterance = AVSpeechUtterance(string: tvEditor.text)
+            let textParagraphs = tvEditor.text.componentsSeparatedByString("\n")
             
-            speechUtterance.rate = rate
-            speechUtterance.pitchMultiplier = pitch
-            speechUtterance.volume = volume
+            for pieceOfText in textParagraphs {
+                let speechUtterance = AVSpeechUtterance(string: pieceOfText)
+                speechUtterance.rate = rate
+                speechUtterance.volume = volume
+                speechUtterance.pitchMultiplier = pitch
+                
+                speechUtterance.postUtteranceDelay = 0.005
+                
+                speechSynthesizer.speakUtterance(speechUtterance)
+            }
             
-            speechSynthesizer.speakUtterance(speechUtterance)
         } else {
             speechSynthesizer.continueSpeaking()
         }
@@ -127,5 +132,12 @@ class ViewController: UIViewController {
         speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
         animateActionButtonAppearance(false)
     }
+    
+    // MARK: AVSpeech Delegate
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
+        animateActionButtonAppearance(false)
+    }
+
 }
 
