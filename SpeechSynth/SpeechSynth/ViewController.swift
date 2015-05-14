@@ -100,6 +100,7 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
             self.btnSpeak.alpha = speakButtonAlphaValue
             self.btnPause.alpha = pauseStopButtonsAlphaValue
             self.btnStop.alpha = pauseStopButtonsAlphaValue
+            self.pvSpeechProgress.alpha = pauseStopButtonsAlphaValue
         })
     }
 
@@ -147,6 +148,7 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
     // MARK: AVSpeech Delegate
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
+        
         spokenTextLength =  spokenTextLength + count(utterance.speechString.utf16) + 1
         let progress: Float = Float(spokenTextLength * 100 / totalTextLength)
         pvSpeechProgress.progress = progress/100
@@ -161,7 +163,8 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
     }
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance!) {
-        
+        let progress: Float = Float(spokenTextLength + characterRange.location) * 100 / Float(totalTextLength)
+        pvSpeechProgress.progress = progress / 100
     }
 
 }

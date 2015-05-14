@@ -7,10 +7,17 @@
 //
 
 import UIKit
+import AVFoundation
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tbSettings: UITableView!
+    
+    var pitch: Float!
+    var rate: Float!
+    var volume: Float!
+    
+    let speechSettings = NSUserDefaults.standardUserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +27,28 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
         tbSettings.layer.cornerRadius = 15.0
         
-        // Do any additional setup after loading the view.
+        loadUserDefaults(speechSettings)
+      
+    }
+    
+    func handleSliderValueChange(sender: UISlider) {
+        
+    }
+    
+    func loadUserDefaults(defaults: NSUserDefaults) -> Bool{
+        if let defaultPitch = defaults.valueForKey("pitch") as? Float {
+            pitch = defaultPitch
+            rate = defaults.valueForKey("rate") as! Float
+            volume = defaults.valueForKey("volume") as! Float
+            
+            return true
+        } else{
+            pitch = 1.0
+            rate = 1.0
+            volume = 1.0
+            
+            return false
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -44,11 +72,48 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return 3
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: UITableViewCell!
+        
+        if indexPath.row < 3 {
+            cell = tableView.dequeueReusableCellWithIdentifier("idCellSlider", forIndexPath: indexPath) as! UITableViewCell
+            
+            let keyLabel = cell.contentView.viewWithTag(10) as? UILabel
+            let valueLabel = cell.contentView.viewWithTag(20) as? UILabel
+            let slider = cell.contentView.viewWithTag(30) as? UISlider
+            
+            var value: Float = 0.0
+            switch indexPath.row {
+                case 0:
+                    value = rate
+                    keyLabel?.text = "Rate"
+                    valueLabel?.text = NSString(format: "%.2", rate) as String
+                    slider?.minimumValue = AVSpeechUtteranceMinimumSpeechRate
+                    slider?.maximumValue = AVSpeechUtteranceMaximumSpeechRate
+                    slider?.addTarget(self, action: "handleSliderValueChange", forControlEvents: UIControlEvents.ValueChanged)
+                case 1:
+                    value = pitch
+                    keyLabel?.text = "Pitch"
+                    valueLabel?.text = NSString(format: "%.2", rate) as String
+                    slider?.minimumValue = 0.5
+                    slider?.maximumValue = 2.0
+                    slider?.addTarget(self, action: "handleSliderValueChange", forControlEvents: UIControlEvents.ValueChanged)
+                default:
+                    value = volume
+                    keyLabel?.text = "Volume"
+                    valueLabel?.text = NSString(format: "%.2", rate) as String
+                    slider?.minimumValue = 0.0
+                    slider?.maximumValue = 1.0
+                    slider?.addTarget(self, action: "handleSliderValueChange", forControlEvents: UIControlEvents.ValueChanged)
+            }
+            
+            if slider?.value != value {
+                slider?.value = value
+            }
+        }
         
         return cell
     }
