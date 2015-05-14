@@ -23,6 +23,11 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
     var rate: Float!
     var pitch: Float!
     var volume: Float!
+    
+    var totalUtterances: Int! = 0
+    var currentUtterance: Int! = 0
+    var totalTextLength: Int! = 0
+    var spokenTextLength: Int! = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,13 +110,19 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
         if !speechSynthesizer.speaking {
             let textParagraphs = tvEditor.text.componentsSeparatedByString("\n")
             
+            totalUtterances = textParagraphs.count
+            currentUtterance = 0
+            totalTextLength = 0
+            spokenTextLength = 0
+            
             for pieceOfText in textParagraphs {
                 let speechUtterance = AVSpeechUtterance(string: pieceOfText)
                 speechUtterance.rate = rate
                 speechUtterance.volume = volume
                 speechUtterance.pitchMultiplier = pitch
-                
                 speechUtterance.postUtteranceDelay = 0.005
+                
+                totalTextLength = totalTextLength + count(pieceOfText.utf16)
                 
                 speechSynthesizer.speakUtterance(speechUtterance)
             }
@@ -136,7 +147,21 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
     // MARK: AVSpeech Delegate
     
     func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didFinishSpeechUtterance utterance: AVSpeechUtterance!) {
-        animateActionButtonAppearance(false)
+        spokenTextLength =  spokenTextLength + count(utterance.speechString.utf16) + 1
+        let progress: Float = Float(spokenTextLength * 100 / totalTextLength)
+        pvSpeechProgress.progress = progress/100
+        
+        if currentUtterance == totalUtterances  {
+            animateActionButtonAppearance(false)
+        }
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, didStartSpeechUtterance utterance: AVSpeechUtterance!) {
+        currentUtterance = currentUtterance + 1
+    }
+    
+    func speechSynthesizer(synthesizer: AVSpeechSynthesizer!, willSpeakRangeOfSpeechString characterRange: NSRange, utterance: AVSpeechUtterance!) {
+        
     }
 
 }
