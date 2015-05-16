@@ -10,7 +10,7 @@ import UIKit
 import QuartzCore
 import AVFoundation
 
-class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
+class ViewController: UIViewController, AVSpeechSynthesizerDelegate, SettingsViewControllerDelegate {
     
     @IBOutlet weak var tvEditor: UITextView!
     @IBOutlet weak var btnSpeak: UIButton!
@@ -143,6 +143,24 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate {
     @IBAction func stopSpeech(sender: AnyObject){
         speechSynthesizer.stopSpeakingAtBoundary(AVSpeechBoundary.Immediate)
         animateActionButtonAppearance(false)
+    }
+    
+    // MARK: Storyboard Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "idSegueSettings"{
+            let settingsViewController = segue.destinationViewController as! SettingsViewController
+            settingsViewController.delegate = self as SettingsViewControllerDelegate
+        }
+    }
+    
+    // MARK: SettingsViewControllerDelegate
+    
+    func didSaveSettings() {
+        let settings = NSUserDefaults.standardUserDefaults() as NSUserDefaults!
+        rate = settings.valueForKey("rate") as! Float
+        pitch = settings.valueForKey("pitch") as! Float
+        volume = settings.valueForKey("volume") as! Float
     }
     
     // MARK: AVSpeech Delegate

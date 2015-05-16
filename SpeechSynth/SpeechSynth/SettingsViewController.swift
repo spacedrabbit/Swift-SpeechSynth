@@ -9,6 +9,10 @@
 import UIKit
 import AVFoundation
 
+protocol SettingsViewControllerDelegate{
+    func didSaveSettings()
+}
+
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var tbSettings: UITableView!
@@ -16,6 +20,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     var pitch: Float!
     var rate: Float!
     var volume: Float!
+    
+    var delegate: SettingsViewControllerDelegate!
     
     let speechSettings = NSUserDefaults.standardUserDefaults()
     
@@ -63,17 +69,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -138,7 +133,13 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func saveSettings(sender: AnyObject) {
+        NSUserDefaults.standardUserDefaults().setFloat(rate, forKey: "rate")
+        NSUserDefaults.standardUserDefaults().setFloat(pitch, forKey: "pitch")
+        NSUserDefaults.standardUserDefaults().setFloat(volume, forKey: "volume")
+        NSUserDefaults.standardUserDefaults().synchronize()
         
+        self.delegate.didSaveSettings()
+        navigationController?.popViewControllerAnimated(true)
     }
 
 }
