@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		140541CD1B06EFE900211EAB /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140541CC1B06EFE900211EAB /* CustomSlider.swift */; };
 		14F7D9C51B0428530020600A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F7D9C41B0428530020600A /* AppDelegate.swift */; };
 		14F7D9C71B0428530020600A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14F7D9C61B0428530020600A /* ViewController.swift */; };
 		14F7D9CC1B0428530020600A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 14F7D9CB1B0428530020600A /* Images.xcassets */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		140541CC1B06EFE900211EAB /* CustomSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomSlider.swift; path = SpeechSynth/CustomSlider.swift; sourceTree = "<group>"; };
 		14F7D9BF1B0428530020600A /* SpeechSynth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeechSynth.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14F7D9C31B0428530020600A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		14F7D9C41B0428530020600A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 		14F7D9B61B0428530020600A = {
 			isa = PBXGroup;
 			children = (
+				140541CC1B06EFE900211EAB /* CustomSlider.swift */,
 				14F7D9E41B042B3A0020600A /* Main.storyboard */,
 				14F7D9C11B0428530020600A /* SpeechSynth */,
 				14F7D9D71B0428530020600A /* SpeechSynthTests */,
@@ -218,6 +221,7 @@
 				14F7D9C71B0428530020600A /* ViewController.swift in Sources */,
 				14F7D9C51B0428530020600A /* AppDelegate.swift in Sources */,
 				14F7D9E71B042BAA0020600A /* SettingsViewController.swift in Sources */,
+				140541CD1B06EFE900211EAB /* CustomSlider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +409,7 @@
 				14F7D9E01B0428530020600A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		14F7D9E11B0428530020600A /* Build configuration list for PBXNativeTarget "SpeechSynthTests" */ = {
 			isa = XCConfigurationList;
@@ -413,6 +418,7 @@
 				14F7D9E31B0428530020600A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

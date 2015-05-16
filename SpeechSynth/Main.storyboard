@@ -284,7 +284,7 @@
                                                                 </mask>
                                                             </variation>
                                                         </label>
-                                                        <slider opaque="NO" tag="30" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="HAc-6w-Ucu">
+                                                        <slider opaque="NO" tag="30" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="HAc-6w-Ucu" customClass="CustomSlider" customModule="SpeechSynth" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="-15" width="118" height="31"/>
                                                             <color key="minimumTrackTintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="maximumTrackTintColor" red="0.57647058819999997" green="0.53725490200000003" blue="0.81960784310000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

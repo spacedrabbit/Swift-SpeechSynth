@@ -31,8 +31,16 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
       
     }
     
-    func handleSliderValueChange(sender: UISlider) {
-        
+    func handleSliderValueChange(sender: CustomSlider) {
+        switch sender.sliderIdentifier {
+        case 100:
+            rate = sender.value
+        case 200:
+            pitch = sender.value
+        default:
+            volume = sender.value
+        }
+        tbSettings.reloadData()
     }
     
     func loadUserDefaults(defaults: NSUserDefaults) -> Bool{
@@ -83,31 +91,34 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             let keyLabel = cell.contentView.viewWithTag(10) as? UILabel
             let valueLabel = cell.contentView.viewWithTag(20) as? UILabel
-            let slider = cell.contentView.viewWithTag(30) as? UISlider
+            let slider = cell.contentView.viewWithTag(30) as? CustomSlider
             
             var value: Float = 0.0
             switch indexPath.row {
                 case 0:
                     value = rate
                     keyLabel?.text = "Rate"
-                    valueLabel?.text = NSString(format: "%.2", rate) as String
+                    valueLabel?.text = NSString(format: "%.2f", rate) as String
                     slider?.minimumValue = AVSpeechUtteranceMinimumSpeechRate
                     slider?.maximumValue = AVSpeechUtteranceMaximumSpeechRate
-                    slider?.addTarget(self, action: "handleSliderValueChange", forControlEvents: UIControlEvents.ValueChanged)
+                    slider?.sliderIdentifier = 100
+                    slider?.addTarget(self, action: "handleSliderValueChange:", forControlEvents: UIControlEvents.ValueChanged)
                 case 1:
                     value = pitch
                     keyLabel?.text = "Pitch"
-                    valueLabel?.text = NSString(format: "%.2", rate) as String
+                    valueLabel?.text = NSString(format: "%.2f", pitch) as String
                     slider?.minimumValue = 0.5
                     slider?.maximumValue = 2.0
-                    slider?.addTarget(self, action: "handleSliderValueChange", forControlEvents: UIControlEvents.ValueChanged)
+                    slider?.sliderIdentifier = 200
+                    slider?.addTarget(self, action: "handleSliderValueChange:", forControlEvents: UIControlEvents.ValueChanged)
                 default:
                     value = volume
                     keyLabel?.text = "Volume"
-                    valueLabel?.text = NSString(format: "%.2", rate) as String
+                    valueLabel?.text = NSString(format: "%.2f", volume) as String
                     slider?.minimumValue = 0.0
                     slider?.maximumValue = 1.0
-                    slider?.addTarget(self, action: "handleSliderValueChange", forControlEvents: UIControlEvents.ValueChanged)
+                    slider?.sliderIdentifier = 300
+                    slider?.addTarget(self, action: "handleSliderValueChange:", forControlEvents: UIControlEvents.ValueChanged)
             }
             
             if slider?.value != value {
