@@ -23,6 +23,7 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate, SettingsVie
     var rate: Float!
     var pitch: Float!
     var volume: Float!
+    var preferredVoiceLanguageCode: String!
     
     var totalUtterances: Int! = 0
     var currentUtterance: Int! = 0
@@ -125,6 +126,11 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate, SettingsVie
                 
                 totalTextLength = totalTextLength + count(pieceOfText.utf16)
                 
+                if let voiceLanguageCode = preferredVoiceLanguageCode{
+                    let voice = AVSpeechSynthesisVoice(language: voiceLanguageCode)
+                    speechUtterance.voice = voice
+                }
+                
                 speechSynthesizer.speakUtterance(speechUtterance)
             }
             
@@ -161,6 +167,7 @@ class ViewController: UIViewController, AVSpeechSynthesizerDelegate, SettingsVie
         rate = settings.valueForKey("rate") as! Float
         pitch = settings.valueForKey("pitch") as! Float
         volume = settings.valueForKey("volume") as! Float
+        preferredVoiceLanguageCode = settings.valueForKey("languageCode") as! String
     }
     
     // MARK: AVSpeech Delegate
