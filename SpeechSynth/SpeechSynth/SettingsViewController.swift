@@ -20,6 +20,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     var pitch: Float!
     var rate: Float!
     var volume: Float!
+    var arrVoiceLanguages: [Dictionary<String, String!>] = []
+    var selectedVoiceLanguage = 0
     
     var delegate: SettingsViewControllerDelegate!
     
@@ -34,6 +36,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tbSettings.layer.cornerRadius = 15.0
         
         loadUserDefaults(speechSettings)
+        prepareVoiceList()
       
     }
     
@@ -64,6 +67,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return false
         }
     }
+    
+    func prepareVoiceList() {
+        for voice in AVSpeechSynthesisVoice.speechVoices(){
+            let voiceLanguageCode = (voice as! AVSpeechSynthesisVoice).language
+            let languageName = NSLocale.currentLocale().displayNameForKey(NSLocaleIdentifier, value: voiceLanguageCode)
+            let dictionary = ["languageName":languageName, "languageCode":voiceLanguageCode]
+            arrVoiceLanguages.append(dictionary)
+        }
+    }
+    
+    // MARK: UITableView Delegate/Datasource
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
